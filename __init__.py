@@ -23,8 +23,14 @@ def create_app():
     #     return 'Hello, Pybo!'
 
     # blueprint
-    from .views import main_views, question_views, answer_views
+    from .views import main_views, question_views, answer_views, auth_views
     app.register_blueprint(main_views.bp)
     app.register_blueprint(question_views.bp)
     app.register_blueprint(answer_views.bp)
+    app.register_blueprint(auth_views.bp)
+
+    from .filter import format_datetime
+    # register filter
+    app.jinja_env.filters['datetime'] = format_datetime
+
     return app

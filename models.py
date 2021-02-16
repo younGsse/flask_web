@@ -14,3 +14,9 @@ class Answer(db.Model):
     # 파이썬 코드를 이용하여 질문 데이터 삭제시 연관된 답변 데이터 모두 삭제하는 방법
     content = db.Column(db.Text(), nullable=False)
     create_date = db.Column(db.DateTime(), nullable=False)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
