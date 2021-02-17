@@ -77,3 +77,20 @@ python 코드로 컬럼을 설정한 후 2가지만 기억하자
 </code>
 </pre>
 설정한 것 적용하는 것과 적용된 것을 실행하는 것
+
+## Issue
+### Issue 1.
+DB에 comment와 관련된 모델을 넣을 때,
+question, answer에 대해서 nullable=False 성격을 부여했는데,
+question에 대한 댓글 추가시 answer_id가 None 값이고,
+answer에 대한 댓글 추가시 question_id가 None 값이 부여됨.
+
+#### Solution
+생각해보니, Question에 대한 댓글은 answer_id가 Null이 가능하고,
+Answer에 대한 댓글은 question_id가 Null이 가능함. nullable=True로 변경.
+추가로, 댓글에 대한 수정, 삭제의 경우 파라미터 값이 comment_id로 전달된다.
+
+### Issue 2.
+새 글 등록시 제목이 내용에 써지는 상황
+#### Solution
+question_views.py 29 line, content=form.subject.data -> content=form.content.data

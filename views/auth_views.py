@@ -6,6 +6,8 @@ from pybo import db
 from pybo.forms import UserCreateForm, UserLoginForm
 from pybo.models import User
 
+import functools
+
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/signup/', methods=('GET', 'POST'))
@@ -52,3 +54,15 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = User.query.get(user_id)
+
+def login_required(view):
+    # functools.wraps? 데코레이터 함수를 사용할 때, 동작이 다른 함수로 감싸지는데,
+    # 오류 추적 및 문서화에 걸림돌이 된다. functools.wraps를 통해 docstring을 보존한다.
+    # 파라미터 view는 데코레이터함수와 wraps 파라미터가 동일하면 됨.
+    # 참고 https://velog.io/@doondoony/python-functools-wraps
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+        return view(**kwargs)
+    return wrapped_view
